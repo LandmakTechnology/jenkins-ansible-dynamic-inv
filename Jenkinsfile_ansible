@@ -1,0 +1,27 @@
+pipeline {
+  agent { 
+  label 'ansiblenode'
+  }
+  
+  environment {
+   AWS_EC2_PRIVATE_KEY=credentials('ec2-private-key') 
+  }
+  
+  stages {
+    
+    //Get the Code from GitHub Repo
+    stage('CheckOutCode'){
+      steps{
+        git "https://github.com/LandmakTechnology/ansible29a"
+        }
+    }
+     
+    //Run the playbook
+    stage('RunPlaybook') {
+      steps {
+        sh "ansible-playbook  playbooks/installTomcat.yml "
+      }
+    }
+  
+  }//stages closing
+}//pipeline closing
