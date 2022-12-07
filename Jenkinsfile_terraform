@@ -1,17 +1,26 @@
 pipeline{
 	agent {
-		  label 'terraformnode'
+		label 'terraformnode'
 	}
 	stages{
 		stage('clonecode'){
 			steps{
-				git "https://github.com/LandmakTechnology/terraform-jk"
+				git "https://github.com/LandmakTechnology/jenkins-ansible-dynamic-inv"
 			}
 		}
-		stage('createInfra') {
+		stage('setup'){
 			steps{
+				sh "echo ready to provision"
 				sh "terraform init"
+			}
+		}
+		stage('createInfra'){
+			steps{
+				sh "terraform fmt"
+				sh "terraform validate"
+				sh "terraform show"
 				sh "terraform apply --auto-approve"
+				sh "terraform show"
 			}
 		}
 	}
